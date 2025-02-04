@@ -9,13 +9,16 @@
         <div class="container">
             <h1>Menu</h1>
             {% for meal in meals %}
-            <h2> {{ meal.1 }}</h2>
-            {% for row in item_list %}
-                {% if row.meal_type == meal.0 %}
-                    <h3>{{ row.meal }}</h3>
-                    <p>{{ row.description }}</p>
-                {% endif %}
-            {% endfor %}
+                <h2> {{ meal.1 }}</h2>
+                {% for row in item_list %}
+                    {% if row.meal_type == meal.0 %}
+                        {% if row.status == 0 %}
+                        <a href="{% url 'menu_item' row.pk %}"><h4><del>{{ row.meal }}</del></h4></a>  <span class="meal-price">${{ row.price }}</span>                          <p>{{ row.description }}</p>
+                        {% else %}
+                        <a href="{% url 'menu_item' row.pk %}"><h4>{{ row.meal }}</h4></a> <span class="meal-price">${{ row.price }}</span>                        <p>{{ row.description }}</p>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
