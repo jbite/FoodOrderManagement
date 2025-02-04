@@ -1,18 +1,35 @@
-<!doctype html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-        <title>Title</title>
-    </head>
-    <body>
-        <div class="container">
-            <h1>{{ item.meal }}</h1>
-            {% comment %} <p>{{  }} {% endcomment %}
-           
-        </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    </body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{ item.meal }}</h1>
+    <p>{{ item.description }}</p>
+    <p>Price: $<span id="item-price">{{ item.price }}</span></p>
+
+    <form method="post" id="order-form">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" value="{{ item.id }}">
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" required>
+        <p>Total: $<span id="total-price">{{ item.price }}</span></p> <button type="submit">Add to Order</button>
+    </form>
+
+    <script>
+        const quantityInput = document.getElementById('quantity');
+        const itemPrice = document.getElementById('item-price');
+        const totalPrice = document.getElementById('total-price');
+        const form = document.getElementById('order-form');
+
+        quantityInput.addEventListener('input', function() {
+            const quantity = parseInt(quantityInput.value) || 1; // Default to 1 if NaN
+            const price = parseFloat(itemPrice.textContent);
+            const total = quantity * price;
+            totalPrice.textContent = total.toFixed(2); // Update total price display
+        });
+
+        form.addEventListener('submit', function(event) {
+           // You can optionally add client-side validation here before submit
+           // or any other pre-processing of data
+        });
+
+    </script>
+
+{% endblock %}
